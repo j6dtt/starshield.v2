@@ -23,7 +23,7 @@ def convert_seconds_to_dhms(seconds):
 
 # ---------------- Token request -----------------
 token_body = {
-    "client_id": "38cdbb48-4507-4fa9-a0ef-5865c87ff1e1",
+    "client_id": "f3011592-21f7-491e-aeea-ac6449cc8108",
     "client_secret": "C3ntC0mSt@rshieldAPI",
     "grant_type": "client_credentials"
 }
@@ -125,8 +125,12 @@ for term in allterms:
     active_terms.append(term)
 
 # -------------- Get all servicelines ---------------
-i = 0
+#i = 0
 sl = []    # service lines list
+for term in active_terms:
+    if term['serviceLineNumber']:
+        sl.append(term['serviceLineNumber'])
+"""  
 while True:
     getAllServiceLines = requests.get(
         f"https://starlink.com/api/public/v2/service-lines?page={i}&orderByCreatedDateDescending=true",
@@ -146,7 +150,7 @@ while True:
     i += 1
     if metadata['isLastPage']:
         break
-        
+"""        
 with open('./allserviceLines.json', 'w') as file:
     json.dump(sl, file, indent=4, ensure_ascii=False)
 
@@ -172,13 +176,16 @@ while True:
     for usage in allUsages:
         for term in active_terms:
             if term['serviceLineNumber'] == usage['serviceLineNumber']:
+                term['dataPlan'] = usage['servicePlan']['productId']
+                term['PlanStartDate'] = usage['servicePlan']['subscriptionActiveFrom']
+                term['PlanEndDate'] = usage['servicePlan']['subscriptionEndDate']
                 term['billingCycleStartDate'] = usage['startDate']
                 term['billingCycleEndDate'] = usage['endDate']                  
-                term['usageLimitGB'] = usage['servicePlan']['overageLine']['usageLimitGB']
-                term['currentTotalUsageGB'] = round(usage['servicePlan']['overageLine']['consumedAmountGB'], 2)
-                term['usageOverageAmountGB'] = round(usage['servicePlan']['overageLine']['overageAmountGB'], 2)
-                term['usageOveragePrice'] = usage['servicePlan']['overageLine']['overagePrice']
-                term['usageOveragePricePerGB'] = usage['servicePlan']['overageLine']['pricePerGB']
+                term['usageLimitGB'] = usage['servicePlan']['overageLine']['usageLimitGB'] if usage['servicePlan']['overageLine'] else usage['servicePlan']['usageLimitGB']
+                term['currentTotalUsageGB'] = round(usage['servicePlan']['overageLine']['consumedAmountGB'], 2) if usage['servicePlan']['overageLine'] else usage['billingCycles'][0]['totalPriorityGB']
+                term['usageOverageAmountGB'] = round(usage['servicePlan']['overageLine']['overageAmountGB'], 2) if usage['servicePlan']['overageLine'] else 0
+                term['usageOveragePrice'] = usage['servicePlan']['overageLine']['overagePrice'] if usage['servicePlan']['overageLine'] else 0
+                term['usageOveragePricePerGB'] = usage['servicePlan']['overageLine']['pricePerGB'] if usage['servicePlan']['overageLine'] else 0
                 term['usageLastUpdated'] = usage['lastUpdated']
     i += 1
     if metadata['isLastPage']:
@@ -188,7 +195,7 @@ while True:
 # Generate user terminal ids list        
 ut = []    # terminal ids list
 for term in active_terms:
-    if term.get("serviceLineNumber"):
+    if term['serviceLineNumber']:
         ut.append(term["userTerminalId"])
 
 # Telemetry query body
