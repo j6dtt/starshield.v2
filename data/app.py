@@ -110,9 +110,14 @@ for term in allterms:
     term['dataPlan'] = ''
     term['PlanStartDate'] = ''
     term['PlanEndDate'] = ''
-    term['billingStartDate'] = ''
-    term['billingEndDate'] = ''
-    term['currentTotalUsage'] = ''
+    term['billingCycleStartDate'] = ''
+    term['billingCycleEndDate'] = ''
+    term['usageLimitGB'] = 0
+    term['currentTotalUsageGB'] = 0
+    term['usageOverageAmountGB'] = 0
+    term['usageOveragePrice'] = 0
+    term['usageOveragePricePerGB'] = 0
+    term['usageLastUpdated'] = ''
     term['ipv4'] = ''
     term['iptimestamp'] = ''
     term['Alert'] = ''
@@ -157,14 +162,24 @@ payload = {
 
 i = 0
 while True:
-    dataUsage = requests.post(
+    getAllUsages = requests.post(
         f"https://starlink.com/api/public/v2/data-usage/query?page={i}&limit=250", 
         json=payload, 
         headers=headers
     ).json()
-           
-    #allUsages = 
-
+    metadata = getAllUsages["content"]
+    allUsages = getAllUsages["content"]["results"]
+    for usage in allUsages:
+        for term in active_terms:
+            if term['serviceLineNumber'] == usage['serviceLineNumber']:
+                term['billingCycleStartDate'] = usage['startDate']
+                term['billingCycleEndDate'] = usage['endDate']                  
+                term['usageLimitGB'] = usage['servicePlan']['overageLine']['usageLimitGB']
+                term['currentTotalUsageGB'] = round(usage['servicePlan']['overageLine']['consumedAmountGB'], 2)
+                term['usageOverageAmountGB'] = round(usage['servicePlan']['overageLine']['overageAmountGB'], 2)
+                term['usageOveragePrice'] = usage['servicePlan']['overageLine']['overagePrice']
+                term['usageOveragePricePerGB'] = usage['servicePlan']['overageLine']['pricePerGB']
+                term['usageLastUpdated'] = usage['lastUpdated']
     i += 1
     if metadata['isLastPage']:
         break
