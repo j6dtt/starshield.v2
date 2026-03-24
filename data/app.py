@@ -72,9 +72,17 @@ def get_starshield_data(headers, account):
     active_terms = []
     allterms = []
     i = 0
+    if account['accountquery']['mode'] == 'full':
+        termurl = f"https://starlink.com/api/public/v2/user-terminals?page={i}"
+    elif account['accountquery']['mode'] == 'include':
+        sl_query = ""
+        for svcline in account['accountquery']['service_lines']:
+            sl_query += f"serviceLineNumbers={svcline}&"
+        termurl = f"https://starlink.com/api/public/v2/user-terminals?{sl_query}page={i}"
+
     while True:
         getAllTerms = requests.get(
-            f"https://starlink.com/api/public/v2/user-terminals?page={i}",
+            termurl,
             headers=headers
         ).json()
         metadata = getAllTerms["content"]
@@ -93,7 +101,7 @@ def get_starshield_data(headers, account):
 #    with open('./allterms.json', 'w') as file:
 #        json.dump(allterms, file, indent=4, ensure_ascii=False)
 
-    print(f"terms: {len(allterms)}")
+    print(f"{accountNumber} - terms: {len(allterms)}")
 
     # -------------- Create dataset --------------
     for term in allterms:
@@ -327,6 +335,7 @@ def get_starshield_data(headers, account):
 
 
     print(f"active terms: {len(active_terms)}")
+    print("-------------------------------")
     return active_terms
 
 

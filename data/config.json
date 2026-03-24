@@ -9,31 +9,8 @@
                         "client_id": "441eab43-4ec5-42c5-88ca-c5cf6e52f88c",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
-                            "service_lines": []
-                        }
-                    },
-                    {
-                        "account_num": "ACC-3975599-18248-35",
-                        "client_id": "05f8219c-9727-43f3-8ea0-859766e391a8",
-                        "client_secret": "_secret_",
-                        "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
-                            "service_lines": []
-                        }
-                    },
-                    {
-                        "account_num": "ACC-2978741-84178-31",
-                        "client_id": "832c23b2-bfaa-4a0a-a842-c958fcde3a26",
-                        "client_secret": "_secret_",
-                        "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -42,20 +19,8 @@
                         "client_id": "72088ec0-4748-4d78-9469-ae9aa377d047",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
-                            "service_lines": []
-                        }
-                    },
-                    {
-                        "account_num": "ACC-8729964-95846-42",
-                        "client_id": "9ecd5c74-b059-4273-a507-8f0ac9da2134",
-                        "client_secret": "_secret_",
-                        "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -64,9 +29,8 @@
                         "client_id": "b7f306b0-23a9-46ad-a93c-8a88b9b74e54",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -75,9 +39,8 @@
                         "client_id": "252864d6-a17b-4a0c-bd3f-038fc492605a",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -86,9 +49,8 @@
                         "client_id": "e47656c0-1620-428f-ab99-ddd6895842cc",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -97,9 +59,8 @@
                         "client_id": "e8ffed58-a860-451c-8f44-09554919dc68",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -108,9 +69,8 @@
                         "client_id": "8d0669f1-d675-41a1-bb6c-4a5260bacef8",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -119,9 +79,8 @@
                         "client_id": "226aad9c-d8c5-4c8e-aaad-24526b9ffb16",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -130,9 +89,8 @@
                         "client_id": "f126b64d-8f0b-4d5d-a84e-802c3b697f4b",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -141,9 +99,8 @@
                         "client_id": "b6aca02f-b00a-4536-884b-dfb485ce1eea",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -152,9 +109,8 @@
                         "client_id": "a3a79e98-5b87-45db-b381-ac2e8338848f",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -163,9 +119,8 @@
                         "client_id": "506470f6-5a4e-47a0-a115-9576600babdc",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -174,20 +129,8 @@
                         "client_id": "06c3d850-d295-4ce2-9e99-60bd79099749",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
-                            "service_lines": []
-                        }
-                    },
-                    {
-                        "account_num": "ACC-6026364-70597-20",
-                        "client_id": "2a7611e4-8e30-4085-84f4-a97cb831f0cb",
-                        "client_secret": "_secret_",
-                        "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -196,9 +139,8 @@
                         "client_id": "6d90efe3-8bc4-4d1e-95ee-c7c03f20d912",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -207,9 +149,8 @@
                         "client_id": "be530377-6b65-48d3-9eaa-ff75dcb9c40b",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -218,9 +159,8 @@
                         "client_id": "8237ef38-800d-4a38-a1a7-296b3bb31681",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -229,9 +169,8 @@
                         "client_id": "96b586c4-929d-4c39-aaea-65678cd24de8",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -240,9 +179,8 @@
                         "client_id": "a42e86a9-5d96-4276-8487-9f46b56333a8",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -251,9 +189,8 @@
                         "client_id": "950a281f-b9d5-443c-9576-a3700a8c31ec",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -262,20 +199,8 @@
                         "client_id": "c6e430e2-8325-4d31-8d64-dfab7163d459",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
-                            "service_lines": []
-                        }
-                    },
-                    {
-                        "account_num": "ACC-8662532-75587-29",
-                        "client_id": "8d055a88-f118-4770-a75c-d332297d9be7",
-                        "client_secret": "_secret_",
-                        "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -284,9 +209,8 @@
                         "client_id": "9afb6fbb-f243-4210-be07-b0caef1271f0",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -295,9 +219,8 @@
                         "client_id": "ed58e813-7580-4fdb-88ec-55e97c505b60",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -306,9 +229,8 @@
                         "client_id": "5806ee98-2ba2-4716-b95a-9ac8d1be4c15",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -317,9 +239,8 @@
                         "client_id": "9a970b7f-d000-48fa-b873-5baca11b4fba",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -328,9 +249,8 @@
                         "client_id": "d3005168-1ef4-4c9e-b00c-f37be4a594a4",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -339,9 +259,8 @@
                         "client_id": "0ece9b42-3860-4c31-92e1-4bd5ef1442b1",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -350,9 +269,8 @@
                         "client_id": "49b097e6-865e-42bb-813b-f780338c79af",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -361,9 +279,8 @@
                         "client_id": "21f60d5d-2eed-4970-affc-6d020e3db1ef",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -372,9 +289,8 @@
                         "client_id": "c4bdd3da-a8d3-4dd2-9ea8-5ee9489027c4",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -383,9 +299,8 @@
                         "client_id": "bc9e8d36-64a8-4565-b785-f5fb850853c3",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -394,9 +309,8 @@
                         "client_id": "2f9aefbb-1032-49ad-afbb-eba398ac66bc",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -405,9 +319,8 @@
                         "client_id": "ea572784-7715-45b4-891c-e3f934e86935",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -416,9 +329,8 @@
                         "client_id": "b49e4e91-b440-45e7-b68b-dd478bf0fbde",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -427,9 +339,8 @@
                         "client_id": "a145ac40-95b6-4c8a-8dea-b28bbe7abb92",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -438,9 +349,8 @@
                         "client_id": "5e79b68b-4dec-41da-b98f-843406e724d2",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -449,9 +359,8 @@
                         "client_id": "38cdbb48-4507-4fa9-a0ef-5865c87ff1e1",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
-                            "mode": "include",
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
+                            "mode": "full",
                             "service_lines": []
                         }
                     },
@@ -460,10 +369,9 @@
                         "client_id": "f3011592-21f7-491e-aeea-ac6449cc8108",
                         "client_secret": "_secret_",
                         "accountquery": {
-                            "_comment": "Query all terminals or partial, mode value below is exclude or include",
-                            "full": true,
+                            "_comment": "Query all terminals or partial, mode value below is full, or exclude, or include",
                             "mode": "include",
-                            "service_lines": []
+                            "service_lines": ["SL-DF-9104558-77355-67","SL-DF-9104557-25939-67","SL-DF-9104556-68704-63"]
                         }
                     }
                 ],
