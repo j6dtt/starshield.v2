@@ -21,12 +21,17 @@ def convert_seconds_to_dhms(seconds):
 
 # ------------------------------------------------
 
+# ---------------- Load config --------------------
+def load_config():
+    with open('./config.json', 'r') as f:
+        return json.load(f)["config"]
+
 # ---------------- Token request -----------------
-def get_auth_headers():
+def get_auth_headers(account, grant_type):
     token_body = {
-        "client_id": "f3011592-21f7-491e-aeea-ac6449cc8108",
-        "client_secret": "C3ntC0mSt@rshieldAPI",
-        "grant_type": "client_credentials"
+        "client_id": account["client_id"],
+        "client_secret": "C3ntC0mSt@rshieldAPI", #account["client_secret"],
+        "grant_type": grant_type
     }
     token_resp = requests.post(
         "https://api.starlink.com/auth/connect/token",
@@ -39,7 +44,7 @@ def get_auth_headers():
         "authorization": f"Bearer {token}"
     }
 
-def get_starshield_data(headers):
+def get_starshield_data(headers, account):
     # --------------- Get account info ----------------
     getAccount = requests.get(
         "https://starlink.com/api/public/v2/account",
@@ -320,12 +325,20 @@ def get_starshield_data(headers):
                 term['Alert'] = (str((alertcodes)).strip("[']")).replace("', '","-")
                 term['AlertDescription'] = (str((alerts)).strip("[']")).replace("', '","-")
 
-    with open('./_allterms.json', 'w') as file:
-        json.dump(active_terms, file, indent=4, ensure_ascii=False)
+
     print(f"active terms: {len(active_terms)}")
     return active_terms
 
 
 if __name__ == "__main__":
-    headers = get_auth_headers()
-    active_terms = get_starshield_data(headers)
+    config = load_config()
+    authentication = config["authentication"]
+    grant_type = authentication["grant_type"]
+    all_terms = []
+    for account in authentication["accounts"]:
+        headers = get_auth_headers(account, grant_type)
+        terms = get_starshield_data(headers, account)
+        all_terms.extend(terms)
+    print(f"ALL TERMINALS: {len(all_terms)}")    
+    with open('./_allterms.json', 'w') as file:
+        json.dump(all_terms, file, indent=4, ensure_ascii=False)
