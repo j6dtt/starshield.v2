@@ -2,24 +2,55 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Running the app
+## Project structure
 
-```bash
-python app.py
+```
+starshield.v2/
+├── docker-compose.yml
+├── .gitignore
+└── data/
+    ├── app.py               — entry point
+    ├── starshield_data.py   — get_starshield_data pipeline
+    ├── config.json          — account and feature configuration
+    └── .env                 — secrets (not committed)
 ```
 
-Output is written to `./_allterms.json`.
+## Running the app
+
+**Local:**
+```bash
+export CLIENT_SECRET=your_secret_here
+cd data
+python3 app.py
+```
+
+**Docker:**
+```bash
+docker compose up
+```
+
+Output is written to `./data/_1.allterms.json`.
+
+## Environment variables
+
+| Variable        | Source  | Description          |
+|-----------------|---------|----------------------|
+| `CLIENT_SECRET` | `.env`  | OAuth client secret  |
+
+Docker Compose injects variables from `./data/.env` automatically. For local runs, export them in the shell — `python-dotenv` is not used.
 
 ## Architecture
 
-`app.py` is a data collection pipeline that queries the Starlink API for multiple accounts and aggregates terminal telemetry into a single dataset.
+`app.py` is a data collection pipeline that queries the Starlink API for multiple accounts and aggregates terminal telemetry into a single dataset. `get_starshield_data` lives in `starshield_data.py`.
 
 ### Execution flow (`__main__`)
 1. `load_config()` — reads `config.json`, returns the `config` object
 2. Iterates over each account in `config.authentication.accounts`
 3. `get_auth_headers(account, grant_type)` — authenticates against `api.starlink.com` and returns bearer token headers
 4. `get_starshield_data(headers, account)` — runs the full data collection pipeline for that account and returns a list of enriched terminal dicts
-5. All account results are merged into `all_terms` and written to `_allterms.json`
+5. All account results are merged into `all_terms` and written to `_1.allterms.json`
+6. Optionally converts to CEF format and forwards to remote syslog
+7. Loop repeats every 60 seconds; `KeyboardInterrupt` exits cleanly
 
 ### `get_starshield_data` pipeline (in order)
 - `/account` — fetches `accountNumber` and `accountName`
@@ -37,7 +68,6 @@ Output is written to `./_allterms.json`.
 config.authentication.accounts[]
   account_num       — used in log messages
   client_id         — OAuth client ID
-  client_secret     — OAuth secret
   accountquery
     mode            — "full" | "include" | "skip"
     service_lines[] — required (non-empty) when mode is "include"
