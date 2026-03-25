@@ -77,7 +77,8 @@ config.remote_server              — remote syslog destination (enable flag)
 ```
 
 ### Error handling strategy
-- `/account` or `/contacts` failure → return `[]` for that account (fatal, can't build dataset)
-- `/user-terminals` failure → return `[]` for that account (fatal, nothing to enrich)
-- `/data-usage` or `/telemetry` failure → log error, continue (terminals returned without that data)
-- Per-account exceptions in `__main__` → logged and skipped, loop continues
+- `ConnectionError` anywhere in `get_starshield_data` → re-raised, aborts entire account iteration, cycle restarts after 60s sleep
+- `/account` or `/contacts` failure (non-connection) → return `[]` for that account (fatal, can't build dataset)
+- `/user-terminals` failure (non-connection) → return `[]` for that account (fatal, nothing to enrich)
+- `/data-usage` or `/telemetry` failure (non-connection) → log error, continue (terminals returned without that data)
+- Per-account non-connection exceptions in `__main__` → logged and skipped, next account continues

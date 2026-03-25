@@ -28,6 +28,8 @@ def get_starshield_data(headers, account):
         ).json()
         accountNumber = getAccount["content"]["accountNumber"]
         accountName = getAccount["content"]["accountName"]
+    except requests.exceptions.ConnectionError:
+        raise
     except Exception as e:
         logging.error(f"{account['account_num']} - /account failed: {e}")
         return []
@@ -48,6 +50,8 @@ def get_starshield_data(headers, account):
             ),
             ""
         )
+    except requests.exceptions.ConnectionError:
+        raise
     except Exception as e:
         logging.error(f"{account['account_num']} - /contacts failed: {e}")
         return []
@@ -96,6 +100,8 @@ def get_starshield_data(headers, account):
             i += 1
             if metadata['isLastPage']:
                 break
+    except requests.exceptions.ConnectionError:
+        raise
     except Exception as e:
         logging.error(f"{account['account_num']} - /user-terminals failed: {e}")
         return []
@@ -198,6 +204,8 @@ def get_starshield_data(headers, account):
             i += 1
             if metadata['isLastPage']:
                 break
+    except requests.exceptions.ConnectionError:
+        raise
     except Exception as e:
         logging.error(f"{accountNumber} - /data-usage failed: {e}")
 
@@ -332,6 +340,8 @@ def get_starshield_data(headers, account):
                         alertcodes.append('96')
                     term['Alert'] = (str((alertcodes)).strip("[']")).replace("', '","-")
                     term['AlertDescription'] = (str((alerts)).strip("[']")).replace("', '","-")
+    except requests.exceptions.ConnectionError:
+        raise
     except Exception as e:
         logging.error(f"{accountNumber} - /telemetry failed: {e}")
 
