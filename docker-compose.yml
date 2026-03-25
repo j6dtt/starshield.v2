@@ -1,0 +1,10 @@
+services:
+  starshield.v2:
+    container_name: starshield.v2
+    image: python:3.13-slim-u7
+    volumes:
+      - ./data:/app
+    env_file:
+      - ./data/.env
+    command: ["python3", "app.py"]
+    restart: unless-stopped

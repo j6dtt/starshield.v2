@@ -379,8 +379,8 @@
         },
         "cef": {
             "_comment": "Convert data to CEF messages. DO NOT change field: 1, 4, and 5",
-            "enable": false,
-            "headers1": "CEF:0|CENTCOM|J6-DTT|{}|{}|STARSHIELDSTATUSV2|APP003|",
+            "enable": true,
+            "headers1": "CEF:0|CENTCOM|J6-DTT|{}|{}|STARSHIELD|APP003|",
             "headers2": "CEF:0|CENTCOM|J6-DTT|{}|{}|STARSHIELDDATAUSAGEV2|APP003|",
             "headers3": "CEF:0|CENTCOM|J6-DTT|{}|{}|STARSHIELDIP|APP003|"
         },
