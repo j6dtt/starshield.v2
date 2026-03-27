@@ -28,11 +28,9 @@ def get_starshield_data(headers, account):
         ).json()
         accountNumber = getAccount["content"]["accountNumber"]
         accountName = getAccount["content"]["accountName"]
-    except requests.exceptions.ConnectionError:
-        raise
     except Exception as e:
         logging.error(f"{account['account_num']} - /account failed: {e}")
-        return []
+        raise
 
     try:
         # ------- Get contact for Component info ----------
@@ -50,11 +48,9 @@ def get_starshield_data(headers, account):
             ),
             ""
         )
-    except requests.exceptions.ConnectionError:
-        raise
     except Exception as e:
         logging.error(f"{account['account_num']} - /contacts failed: {e}")
-        return []
+        raise
 
     try:
         # ------------ Get all terminals --------------
@@ -100,11 +96,9 @@ def get_starshield_data(headers, account):
             i += 1
             if metadata['isLastPage']:
                 break
-    except requests.exceptions.ConnectionError:
-        raise
     except Exception as e:
         logging.error(f"{account['account_num']} - /user-terminals failed: {e}")
-        return []
+        raise
 
     # -------------- Create dataset --------------
     for term in allterms:
@@ -204,10 +198,9 @@ def get_starshield_data(headers, account):
             i += 1
             if metadata['isLastPage']:
                 break
-    except requests.exceptions.ConnectionError:
-        raise
     except Exception as e:
         logging.error(f"{accountNumber} - /data-usage failed: {e}")
+        raise
 
     try:
         # ---------------- Get Telemetry -------------------
@@ -340,10 +333,9 @@ def get_starshield_data(headers, account):
                         alertcodes.append('96')
                     term['Alert'] = (str((alertcodes)).strip("[']")).replace("', '","-")
                     term['AlertDescription'] = (str((alerts)).strip("[']")).replace("', '","-")
-    except requests.exceptions.ConnectionError:
-        raise
     except Exception as e:
         logging.error(f"{accountNumber} - /telemetry failed: {e}")
+        raise
 
     logging.info(f"{accountNumber} - total terminal: {len(active_terms)}, total service lines: {len(sl)}")
     return active_terms

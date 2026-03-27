@@ -63,11 +63,9 @@ if __name__ == "__main__":
                         headers = get_auth_headers(account, grant_type)
                         terms = get_starshield_data(headers, account)
                         all_terms.extend(terms)
-                    except requests.exceptions.ConnectionError as e:
-                        logging.error(f"Connection error: {e} — aborting cycle.")
-                        raise
                     except Exception as e:
-                        logging.error(f"{account['account_num']} - skipped: {e}")
+                        logging.error(f"{account['account_num']} - error: {e} — aborting cycle.")
+                        raise
                 logging.info(f'TOTAL ACCOUNTS: {len(authentication["accounts"])}')
                 logging.info(f"TOTAL TERMINALS: {len(all_terms)}")
                 with open('./_1.allterms.json', 'w') as file:
