@@ -18,13 +18,14 @@ def convert_seconds_to_dhms(seconds):
 
 # ------------------------------------------------
 
-def get_starshield_data(headers, account):
+def get_starshield_data(headers, account, timeout=90):
     try:
         # --------------- Get account info ----------------
         getAccount = requests.get(
             "https://starlink.com/api/public/v2/account",
             headers=headers,
-            verify=False
+            verify=False,
+            timeout=timeout
         ).json()
         accountNumber = getAccount["content"]["accountNumber"]
         accountName = getAccount["content"]["accountName"]
@@ -37,7 +38,8 @@ def get_starshield_data(headers, account):
         getContacts = requests.get(
             "https://starlink.com/api/public/v2/contacts",
             headers=headers,
-            verify=False
+            verify=False,
+            timeout=timeout
         ).json()
 
         component = next(
@@ -81,7 +83,8 @@ def get_starshield_data(headers, account):
             getAllTerms = requests.get(
                 termurl,
                 headers=headers,
-                verify=False
+                verify=False,
+                timeout=timeout
             ).json()
             metadata = getAllTerms["content"]
             Terms = getAllTerms["content"]["results"]
@@ -177,7 +180,8 @@ def get_starshield_data(headers, account):
                 f"https://starlink.com/api/public/v2/data-usage/query?page={i}&limit=250",
                 json=payload,
                 headers=headers,
-                verify=False
+                verify=False,
+                timeout=timeout
             ).json()
             metadata = getAllUsages["content"]
             allUsages = getAllUsages["content"]["results"]
@@ -221,7 +225,8 @@ def get_starshield_data(headers, account):
             "https://starlink.com/api/public/v2/telemetry/query",
             headers=headers,
             json=body,
-            verify=False
+            verify=False,
+            timeout=timeout
         ).json()
 
         # Extract telemetry values

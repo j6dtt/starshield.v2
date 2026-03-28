@@ -49,6 +49,7 @@ if __name__ == "__main__":
         config = load_config()
         authentication = config["authentication"]
         grant_type = authentication["grant_type"]
+        request_timeout = config.get("request_timeout", 90)
     except Exception as e:
         logging.error(f"Error loading configurations(Main): {str(e)}")
         exit()
@@ -61,7 +62,7 @@ if __name__ == "__main__":
                 for account in authentication["accounts"]:
                     try:
                         headers = get_auth_headers(account, grant_type)
-                        terms = get_starshield_data(headers, account)
+                        terms = get_starshield_data(headers, account, request_timeout)
                         all_terms.extend(terms)
                     except Exception as e:
                         logging.error(f"{account['account_num']} - error: {e} — aborting cycle.")
