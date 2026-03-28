@@ -49,7 +49,7 @@ if __name__ == "__main__":
         config = load_config()
         authentication = config["authentication"]
         grant_type = authentication["grant_type"]
-        request_timeout = config.get("request_timeout", 90)
+        request_timeout = config["request_timeout"]
     except Exception as e:
         logging.error(f"Error loading configurations(Main): {str(e)}")
         exit()

@@ -18,7 +18,7 @@ def convert_seconds_to_dhms(seconds):
 
 # ------------------------------------------------
 
-def get_starshield_data(headers, account, timeout=90):
+def get_starshield_data(headers, account, timeout):
     try:
         # --------------- Get account info ----------------
         getAccount = requests.get(
