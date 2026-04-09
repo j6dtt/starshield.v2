@@ -47,7 +47,7 @@ Docker Compose injects variables from `./data/.env` automatically. For local run
 1. `load_config()` — reads `config.json`, returns the `config` object
 2. Iterates over each account in `config.authentication.accounts`
 3. `get_auth_headers(account, grant_type)` — authenticates against `api.starlink.com` and returns bearer token headers
-4. `get_starshield_data(headers, account)` — runs the full data collection pipeline for that account and returns a list of enriched terminal dicts
+4. `get_starshield_data(headers, account, timeout)` — runs the full data collection pipeline for that account and returns a list of enriched terminal dicts
 5. All account results are merged into `all_terms` and written to `_1.allterms.json`
 6. Optionally converts to CEF format and forwards to remote syslog
 7. Loop repeats every 60 seconds; `KeyboardInterrupt` exits cleanly
@@ -72,10 +72,12 @@ config.authentication.accounts[]
     mode            — "full" | "include" | "skip"
     service_lines[] — required (non-empty) when mode is "include"
 config.authentication.grant_type  — always "client_credentials"
+config.request_timeout            — per-request timeout in seconds (required, currently 15)
 config.cef                        — CEF message formatting (enable flag)
 config.remote_server              — remote syslog destination (enable flag)
 ```
 
 ### Error handling strategy
-- Any error anywhere in `get_starshield_data` → logged and re-raised, aborts entire account iteration, cycle restarts after 60s sleep
+- Any error anywhere in `get_starshield_data` (including `requests.Timeout`) → logged and re-raised, aborts entire account iteration, cycle restarts after 60s sleep
 - Any per-account error in `__main__` → logged and re-raised, exits account loop, outer handler sleeps and restarts
+- `request_timeout` is required in `config.json` — missing key raises `KeyError` at startup

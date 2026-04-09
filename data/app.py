@@ -58,8 +58,16 @@ if __name__ == "__main__":
         while True:
             try:
                 all_terms = []
-                logging.info("Starting data retrieval...")
+                seen = set()
+                accounts = []
                 for account in authentication["accounts"]:
+                    if account["account_num"] in seen:
+                        logging.warning(f"{account['account_num']} - duplicate account number in account list, skipping.")
+                    else:
+                        seen.add(account["account_num"])
+                        accounts.append(account)
+                logging.info("Starting data retrieval...")
+                for account in accounts:
                     try:
                         headers = get_auth_headers(account, grant_type)
                         terms = get_starshield_data(headers, account, request_timeout)
@@ -67,7 +75,7 @@ if __name__ == "__main__":
                     except Exception as e:
                         logging.error(f"{account['account_num']} - error: {e} — aborting cycle.")
                         raise
-                logging.info(f'TOTAL ACCOUNTS: {len(authentication["accounts"])}')
+                logging.info(f'TOTAL ACCOUNTS: {len(accounts)}')
                 logging.info(f"TOTAL TERMINALS: {len(all_terms)}")
                 with open('./_1.allterms.json', 'w') as file:
                     json.dump(all_terms, file, indent=4, ensure_ascii=False)
