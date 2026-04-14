@@ -96,12 +96,13 @@ if __name__ == "__main__":
                     proxy_addr = config['remote_server']['remote_addr']
                     proxy_port = config['remote_server']['remote_port']
                     comlibv3.send_events_over_udp(cef_messages, proxy_addr, proxy_port)
-
-
+                
+                logging.info("Waiting for next cycle to run...")
+                logging.info("========================================")
+                time.sleep(60)
             except Exception as e:
                 logging.error(f"Error getting Starshield terminals data (Main): {str(e)}")
-            logging.info("Waiting for next cycle to run...")
-            logging.info("========================================")
-            time.sleep(60)
+                logging.info("Restarting process...")
+                time.sleep(3)
     except KeyboardInterrupt:
         logging.info("Stopped by user.")
