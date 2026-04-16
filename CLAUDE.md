@@ -45,12 +45,13 @@ Docker Compose injects variables from `./data/.env` automatically. For local run
 
 ### Execution flow (`__main__`)
 1. `load_config()` — reads `config.json`, returns the `config` object
-2. Iterates over each account in `config.authentication.accounts`
-3. `get_auth_headers(account, grant_type)` — authenticates against `api.starlink.com` and returns bearer token headers
-4. `get_starshield_data(headers, account, timeout)` — runs the full data collection pipeline for that account and returns a list of enriched terminal dicts
-5. All account results are merged into `all_terms` and written to `_1.allterms.json`
-6. Optionally converts to CEF format and forwards to remote syslog
-7. Loop repeats every 60 seconds; `KeyboardInterrupt` exits cleanly
+2. Deduplicates accounts by `account_num`; duplicates are logged as warnings and skipped
+3. Iterates over deduplicated accounts
+4. `get_auth_headers(account, grant_type)` — authenticates against `api.starlink.com` and returns bearer token headers
+5. `get_starshield_data(headers, account, timeout)` — runs the full data collection pipeline for that account and returns a list of enriched terminal dicts
+6. All account results are merged into `all_terms` and written to `_1.allterms.json`
+7. Optionally converts to CEF format and forwards to remote syslog
+8. Loop repeats every 60 seconds; `KeyboardInterrupt` exits cleanly
 
 ### `get_starshield_data` pipeline (in order)
 - `/account` — fetches `accountNumber` and `accountName`
