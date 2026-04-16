@@ -92,11 +92,11 @@ if __name__ == "__main__":
                 # Send CEF messages to connection proxy
                 forward_data = config['remote_server']['enable']
                 if forward_data and cef_messages:
-                    logging.info('Sending messages to remote host1...')
                     proxy_addr = config['remote_server']['remote_addr']
                     proxy_port = config['remote_server']['remote_port']
+                    logging.info(f"Sending messages to channel {proxy_port}...")
                     comlibv3.send_events_over_udp(cef_messages, proxy_addr, proxy_port)
-                
+
                 logging.info("Waiting for next cycle to run...")
                 logging.info("========================================")
                 time.sleep(60)
@@ -104,5 +104,6 @@ if __name__ == "__main__":
                 logging.error(f"Error getting Starshield terminals data (Main): {str(e)}")
                 logging.info("Restarting process...")
                 time.sleep(3)
+
     except KeyboardInterrupt:
         logging.info("Stopped by user.")
