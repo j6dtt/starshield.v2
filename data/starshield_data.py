@@ -209,15 +209,18 @@ def get_starshield_data(headers, account, timeout):
     try:
         # ---------------- Get Telemetry -------------------
         # Generate user terminal ids list
+        
+        ''' Bug - ut list too large or null generates error: ("Connection broken: InvalidChunkLength(got length b'\\r\\n', 0 bytes read)", InvalidChunkLength(got length b'\r\n', 0 bytes read))
+            Removed "userTerminalIds" param in body, not sure why I had the list there in the first place.
         ut = []    # terminal ids list
         for term in active_terms:
             if term['serviceLineNumber']:
                 ut.append(term["userTerminalId"])
-
+        '''
         # Telemetry query body
         body = {
             "includeUserTerminals": True,
-            "userTerminalIds": ut
+            #"userTerminalIds": ut
         }
 
         # Get last telemetry
@@ -342,5 +345,5 @@ def get_starshield_data(headers, account, timeout):
         logging.error(f"{accountNumber} - /telemetry failed: {e}")
         raise
 
-    logging.info(f"{accountNumber} - total terminal: {len(active_terms)}, total service lines: {len(sl)}")
+    logging.info(f"{accountNumber} ({accountName}) - total terminal: {len(active_terms)}, total service lines: {len(sl)}")
     return active_terms
