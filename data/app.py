@@ -46,17 +46,12 @@ def get_auth_headers(account, grant_type):
 
 if __name__ == "__main__":
     try:
-        config = load_config()
-        authentication = config["authentication"]
-        grant_type = authentication["grant_type"]
-        request_timeout = config["request_timeout"]
-    except Exception as e:
-        logging.error(f"Error loading configurations(Main): {str(e)}")
-        exit()
-
-    try:
         while True:
             try:
+                config = load_config()
+                authentication = config["authentication"]
+                grant_type = authentication["grant_type"]
+                request_timeout = config["request_timeout"]
                 all_terms = []
                 seen = set()
                 accounts = []
