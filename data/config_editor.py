@@ -201,7 +201,7 @@ HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Starshield Account Manager</title>
+<title>Starshield Service Accounts Manager</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', sans-serif; background: #0f1923; color: #c9d1d9; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -213,7 +213,7 @@ HTML = r"""<!DOCTYPE html>
   /* Main layout */
   .main { display: flex; flex: 1; overflow: hidden; }
   /* Left panel — accounts */
-  .left-panel { display: flex; flex-direction: column; flex: 0 0 62%; min-width: 220px; border-right: none; overflow: hidden; }
+  .left-panel { display: flex; flex-direction: column; flex: 0 0 50%; min-width: 220px; border-right: none; overflow: hidden; }
   /* Resizer */
   .resizer { width: 5px; background: #21262d; cursor: col-resize; flex-shrink: 0; transition: background .15s; }
   .resizer:hover, .resizer.dragging { background: #388bfd; }
@@ -291,7 +291,7 @@ HTML = r"""<!DOCTYPE html>
 
 <header>
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-  <h1>Starshield Account Manager</h1>
+  <h1>Starshield APIv2 Service Accounts Manager</h1>
   <span class="header-meta" id="acctCount"></span>
   <div class="header-right">
     <button class="btn-ghost btn-sm" id="btnLogout" onclick="logout()" style="display:none">Sign out</button>
@@ -347,7 +347,7 @@ HTML = r"""<!DOCTYPE html>
 <div class="overlay active" id="loginOverlay">
   <div class="modal login-modal">
     <h3>Sign In</h3>
-    <p class="login-subtitle">Starshield Account Manager</p>
+    <p class="login-subtitle">Starshield APIv2 Service Accounts Manager</p>
     <div class="field">
       <label>Username</label>
       <input type="text" id="lUser" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
