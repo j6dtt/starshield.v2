@@ -95,6 +95,13 @@ if __name__ == '__main__':
         logging.error(f'Cannot reach Docker daemon: {e}')
         sys.exit(1)
 
+    for c in docker_client.containers.list(all=True, filters={'name': 'starshield.v2.'}):
+        try:
+            c.remove(force=True)
+            logging.warning(f'Removed leftover worker container: {c.name}')
+        except Exception:
+            pass
+
     while True:
         cycle_start = time.time()
         try:
