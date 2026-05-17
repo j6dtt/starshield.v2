@@ -39,11 +39,22 @@ def run_worker(docker_client, account, grant_type, request_timeout, client_secre
             working_dir='/app',
             detach=True,
             stdout=True,
-            stderr=False,
+            stderr=True,
         )
-        result   = container.wait(timeout=WORKER_TIMEOUT)
-        output   = container.logs(stdout=True, stderr=False)
+        result    = container.wait(timeout=WORKER_TIMEOUT)
+        output    = container.logs(stdout=True, stderr=False)
+        errors    = container.logs(stdout=False, stderr=True)
         exit_code = result['StatusCode']
+
+        for line in errors.decode('utf-8', errors='replace').splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            if ' - ERROR - ' in line:
+                logging.error(f'[worker] {line}')
+            elif ' - WARNING - ' in line:
+                logging.warning(f'[worker] {line}')
+
         if exit_code != 0:
             logging.error(f'{account_num} - worker exited with code {exit_code}')
             return (account_num, None)
