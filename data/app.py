@@ -53,6 +53,7 @@ if __name__ == "__main__":
                 grant_type = authentication["grant_type"]
                 request_timeout = config["request_timeout"]
                 all_terms = []
+                failed = []
                 seen = set()
                 accounts = []
                 for account in authentication["accounts"]:
@@ -68,22 +69,36 @@ if __name__ == "__main__":
                         terms = get_starshield_data(headers, account, request_timeout)
                         all_terms.extend(terms)
                     except Exception as e:
-                        logging.error(f"{account['account_num']} - error: {e} — aborting cycle.")
-                        raise
-                logging.info(f'TOTAL ACCOUNTS: {len(accounts)}')
-                logging.info(f"TOTAL TERMINALS: {len(all_terms)}")
-                with open('./_1.allterms.json', 'w') as file:
-                    json.dump(all_terms, file, indent=4, ensure_ascii=False)
+                        logging.error(f"{account['account_num']} - error: {e} — skipping account.")
+                        failed.append(account["account_num"])
+                logging.info(f'TOTAL ACCOUNTS: {len(accounts)}  FAILED: {len(failed)}  TERMINALS: {len(all_terms)}')
+                if failed:
+                    logging.warning(f"Failed accounts: {failed}")
 
+                # Load last known good dataset
+                try:
+                    with open('./_1.allterms.json', 'r') as f:
+                        existing = json.load(f)
+                except (FileNotFoundError, json.JSONDecodeError):
+                    existing = []
+
+                # Preserve terminals from failed accounts; replace all others with fresh data
+                failed_set = set(failed)
+                stale = [t for t in existing if t.get('accountNumber') in failed_set]
+                merged = all_terms + stale
+                logging.info(f'MERGED TERMINALS: {len(merged)} ({len(stale)} preserved from {len(failed)} failed accounts)')
+
+                with open('./_1.allterms.json', 'w') as file:
+                    json.dump(merged, file, indent=4, ensure_ascii=False)
 
                 # Convert data to CEF
                 cef_conversion = config['cef']['enable']
-                if cef_conversion and all_terms:
+                if cef_conversion and merged:
                     cef_headers = config['cef']['headers1']
-                    cef_messages = comlibv3.data_to_cef(all_terms, cef_headers)
+                    cef_messages = comlibv3.data_to_cef(merged, cef_headers)
                     with open('./_2.cef.log', 'w', encoding='utf-8') as file:
                         file.write(cef_messages)
-                    
+
                 # Send CEF messages to connection proxy
                 forward_data = config['remote_server']['enable']
                 if forward_data and cef_messages:

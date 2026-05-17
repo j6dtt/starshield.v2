@@ -3,14 +3,14 @@ name: starshield-editor
 services:
   config-editor:
     container_name: starshield.config-editor
-    image: python:3.13-slim-u7
+    image: python:3.13-slim-u9
     volumes:
       - ./data:/app
       - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /app
     env_file:
       - ./data/.env
-    command: ["/bin/sh", "-c", "pip install docker && gunicorn config_editor:app --bind 0.0.0.0:5001 --certfile /app/tls/ssl.lab.int.crt --keyfile /app/tls/ssl.lab.int.key --worker-class gthread --threads 4 --workers 1"]
+    command: ["gunicorn", "config_editor:app", "--bind", "0.0.0.0:5001", "--certfile", "/app/tls/ssl.lab.int.crt", "--keyfile", "/app/tls/ssl.lab.int.key", "--worker-class", "gthread", "--threads", "4", "--workers", "1"]
     ports:
       - "5001:5001"
     restart: unless-stopped
