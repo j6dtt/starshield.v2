@@ -60,6 +60,8 @@ if __name__ == '__main__':
 
     try:
         terms = get_starshield_data(headers, account, request_timeout)
+        for t in terms:
+            t['account_num'] = account_num
     except Exception as e:
         logging.error(f'{account_num} - get_starshield_data failed: {e}')
         sys.exit(1)

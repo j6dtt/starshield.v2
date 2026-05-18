@@ -154,7 +154,7 @@ if __name__ == '__main__':
 
             # Preserve terminals from failed accounts; replace all others with fresh data
             failed_set = set(failed)
-            stale = [t for t in existing if t.get('accountNumber') in failed_set]
+            stale = [t for t in existing if t.get('account_num') in failed_set or t.get('accountNumber') in failed_set]
             merged = all_terms + stale
             logging.info(f'MERGED TERMINALS: {len(merged)} ({len(stale)} preserved from {len(failed)} failed accounts)')
 

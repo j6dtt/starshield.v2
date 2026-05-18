@@ -67,6 +67,8 @@ if __name__ == "__main__":
                     try:
                         headers = get_auth_headers(account, grant_type)
                         terms = get_starshield_data(headers, account, request_timeout)
+                        for t in terms:
+                            t['account_num'] = account['account_num']
                         all_terms.extend(terms)
                     except Exception as e:
                         logging.error(f"{account['account_num']} - error: {e} — skipping account.")
@@ -84,7 +86,7 @@ if __name__ == "__main__":
 
                 # Preserve terminals from failed accounts; replace all others with fresh data
                 failed_set = set(failed)
-                stale = [t for t in existing if t.get('accountNumber') in failed_set]
+                stale = [t for t in existing if t.get('account_num') in failed_set or t.get('accountNumber') in failed_set]
                 merged = all_terms + stale
                 logging.info(f'MERGED TERMINALS: {len(merged)} ({len(stale)} preserved from {len(failed)} failed accounts)')
 
@@ -92,6 +94,7 @@ if __name__ == "__main__":
                     json.dump(merged, file, indent=4, ensure_ascii=False)
 
                 # Convert data to CEF
+                cef_messages = ''
                 cef_conversion = config['cef']['enable']
                 if cef_conversion and merged:
                     cef_headers = config['cef']['headers1']
