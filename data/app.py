@@ -57,11 +57,15 @@ if __name__ == "__main__":
                 seen = set()
                 accounts = []
                 for account in authentication["accounts"]:
-                    if account["account_num"] in seen:
-                        logging.warning(f"{account['account_num']} - duplicate account number in account list, skipping.")
-                    else:
-                        seen.add(account["account_num"])
-                        accounts.append(account)
+                    num = account["account_num"]
+                    if num in seen:
+                        logging.warning(f"{num} - duplicate account number in account list, skipping.")
+                        continue
+                    if account.get("accountquery", {}).get("mode") == "skip":
+                        logging.info(f"{num} - mode=skip, skipping.")
+                        continue
+                    seen.add(num)
+                    accounts.append(account)
                 logging.info("Starting data retrieval...")
                 for account in accounts:
                     try:
