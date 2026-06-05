@@ -516,8 +516,8 @@
         },
         "remote_server": {
             "_comment": "Send data/CEF messages to remote host",
-            "enable": true,
-            "remote_addr": "214.26.81.160",
+            "enable": false,
+            "remote_addr": "",
             "remote_port": 7002
         }
     }
