@@ -4,28 +4,8 @@
             "_comment": "Starshield Service Accounts V2",
             "accounts": [
                 {
-                    "account_num": "ACC-DF-11537801-53531-39",
-                    "client_id": "441eab43-4ec5-42c5-88ca-c5cf6e52f88c",
-                    "client_secret": "_secret_",
-                    "accountquery": {
-                        "_comment": "Query all terminals or partial, mode value below is full or include or skip",
-                        "mode": "full",
-                        "service_lines": []
-                    }
-                },
-                {
                     "account_num": "ACC-3850690-15069-17",
                     "client_id": "72088ec0-4748-4d78-9469-ae9aa377d047",
-                    "client_secret": "_secret_",
-                    "accountquery": {
-                        "_comment": "Query all terminals or partial, mode value below is full or include or skip",
-                        "mode": "full",
-                        "service_lines": []
-                    }
-                },
-                {
-                    "account_num": "ACC-7077373-84235-21",
-                    "client_id": "b7f306b0-23a9-46ad-a93c-8a88b9b74e54",
                     "client_secret": "_secret_",
                     "accountquery": {
                         "_comment": "Query all terminals or partial, mode value below is full or include or skip",
@@ -344,16 +324,6 @@
                     }
                 },
                 {
-                    "account_num": "ACC-8196645-12055-17",
-                    "client_id": "5e79b68b-4dec-41da-b98f-843406e724d2",
-                    "client_secret": "_secret_",
-                    "accountquery": {
-                        "_comment": "Query all terminals or partial, mode value below is full or include or skip",
-                        "mode": "full",
-                        "service_lines": []
-                    }
-                },
-                {
                     "account_num": "ACC-DF-9997456-91667-26",
                     "client_id": "38cdbb48-4507-4fa9-a0ef-5865c87ff1e1",
                     "client_secret": "_secret_",
@@ -396,16 +366,6 @@
                 {
                     "account_num": "ACC-8659800-27693-28",
                     "client_id": "c1a67bc8-1d91-49ba-814e-ceb2b4da8267",
-                    "client_secret": "_secret_",
-                    "accountquery": {
-                        "_comment": "Query all terminals or partial, mode value below is full or include or skip",
-                        "mode": "full",
-                        "service_lines": []
-                    }
-                },
-                {
-                    "account_num": "ACC-7835529-78798-43",
-                    "client_id": "8783323f-3e8e-4bfb-8627-e6688b3a8981",
                     "client_secret": "_secret_",
                     "accountquery": {
                         "_comment": "Query all terminals or partial, mode value below is full or include or skip",
@@ -522,6 +482,26 @@
                         "mode": "full",
                         "service_lines": []
                     }
+                },
+                {
+                    "account_num": "ACC-5170211-57264-6",
+                    "client_id": "1ff73bd6-ccdf-428f-bd30-6f505f89ada3",
+                    "client_secret": "_secret_",
+                    "accountquery": {
+                        "_comment": "Query all terminals or partial, mode value below is full or include or skip",
+                        "mode": "full",
+                        "service_lines": []
+                    }
+                },
+                {
+                    "account_num": "ACC-DF-12714906-62763-50",
+                    "client_id": "0e90d763-0a39-412a-b580-2bff7b627821",
+                    "client_secret": "_secret_",
+                    "accountquery": {
+                        "_comment": "Query all terminals or partial, mode value below is full or include or skip",
+                        "mode": "full",
+                        "service_lines": []
+                    }
                 }
             ],
             "grant_type": "client_credentials"
@@ -536,8 +516,8 @@
         },
         "remote_server": {
             "_comment": "Send data/CEF messages to remote host",
-            "enable": false,
-            "remote_addr": "",
+            "enable": true,
+            "remote_addr": "214.26.81.160",
             "remote_port": 7002
         }
     }
