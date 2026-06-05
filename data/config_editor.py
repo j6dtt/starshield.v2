@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 CONFIG_PATH = './config.json'
 ACCOUNT_COMMENT = 'Query all terminals or partial, mode value below is full or include or skip'
 VALID_MODES = ('full', 'include', 'skip')
+VALID_ACCOUNT_TYPES = ('starlink', 'starshield')
 CONTAINER_NAMES = {'pipeline': 'starshield.v2', 'editor': 'starshield.config-editor'}
 
 
@@ -49,6 +50,8 @@ def validate(body):
         errors.append('account_num is required')
     if not str(body.get('client_id', '')).strip():
         errors.append('client_id is required')
+    if body.get('account_type') not in VALID_ACCOUNT_TYPES:
+        errors.append('account_type must be starlink or starshield')
     aq = body.get('accountquery', {})
     mode = aq.get('mode', '')
     if mode not in VALID_MODES:
@@ -104,6 +107,7 @@ def add_account():
         'account_num': account_num,
         'client_id': body['client_id'].strip(),
         'client_secret': body.get('client_secret', '').strip() or '_secret_',
+        'account_type': body['account_type'],
         'accountquery': {
             '_comment': ACCOUNT_COMMENT,
             'mode': aq['mode'],
@@ -134,6 +138,7 @@ def update_account(account_num):
                 'account_num': a['account_num'],
                 'client_id': body['client_id'].strip(),
                 'client_secret': body.get('client_secret', '').strip() or '_secret_',
+                'account_type': body['account_type'],
                 'accountquery': {
                     '_comment': a.get('accountquery', {}).get('_comment', ACCOUNT_COMMENT),
                     'mode': aq['mode'],
@@ -261,6 +266,8 @@ HTML = r"""<!DOCTYPE html>
   .badge-full { background: #0d4429; color: #3fb950; }
   .badge-include { background: #0c2d6b; color: #79c0ff; }
   .badge-skip { background: #3d1f00; color: #d29922; }
+  .badge-starlink { background: #0c2d6b; color: #79c0ff; }
+  .badge-starshield { background: #0d4429; color: #3fb950; }
   .count { color: #8b949e; font-size: 12px; }
   /* Overlays & modals */
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 200; align-items: center; justify-content: center; }
@@ -312,6 +319,7 @@ HTML = r"""<!DOCTYPE html>
           <tr>
             <th>Account #</th>
             <th>Client ID</th>
+            <th>Type</th>
             <th>Mode</th>
             <th>SL</th>
             <th>Actions</th>
@@ -391,6 +399,13 @@ HTML = r"""<!DOCTYPE html>
     <div class="field">
       <label>Client Secret</label>
       <input type="text" id="fClientSecret" placeholder="_secret_">
+    </div>
+    <div class="field">
+      <label>Account Type</label>
+      <select id="fAccountType">
+        <option value="starlink">starlink</option>
+        <option value="starshield">starshield</option>
+      </select>
     </div>
     <div class="field">
       <label>Mode</label>
@@ -483,6 +498,7 @@ function renderTable(accounts) {
     <tr>
       <td style="font-family:monospace;font-size:12px">${esc(a.account_num)}</td>
       <td style="font-family:monospace;font-size:12px;color:#8b949e">${esc(a.client_id)}</td>
+      <td><span class="badge badge-${esc(a.account_type || 'starlink')}">${esc(a.account_type || 'starlink')}</span></td>
       <td><span class="badge ${badgeClass(a.accountquery.mode)}">${esc(a.accountquery.mode)}</span></td>
       <td class="count">${a.accountquery.service_lines.length || '—'}</td>
       <td><div class="actions">
@@ -503,6 +519,7 @@ function openAdd() {
   document.getElementById('fAccountNum').disabled = false;
   document.getElementById('fClientId').value = '';
   document.getElementById('fClientSecret').value = '';
+  document.getElementById('fAccountType').value = 'starlink';
   document.getElementById('fMode').value = 'full';
   document.getElementById('fServiceLines').value = '';
   onModeChange();
@@ -517,6 +534,7 @@ function openEdit(a) {
   document.getElementById('fAccountNum').disabled = true;
   document.getElementById('fClientId').value = a.client_id;
   document.getElementById('fClientSecret').value = a.client_secret || '_secret_';
+  document.getElementById('fAccountType').value = a.account_type || 'starlink';
   document.getElementById('fMode').value = a.accountquery.mode;
   document.getElementById('fServiceLines').value = (a.accountquery.service_lines || []).join('\n');
   onModeChange();
@@ -535,9 +553,10 @@ async function saveAccount() {
   const account_num = document.getElementById('fAccountNum').value.trim();
   const client_id   = document.getElementById('fClientId').value.trim();
   const client_secret = document.getElementById('fClientSecret').value.trim() || '_secret_';
+  const account_type = document.getElementById('fAccountType').value;
   const mode = document.getElementById('fMode').value;
   const service_lines = document.getElementById('fServiceLines').value.split('\n').map(s => s.trim()).filter(Boolean);
-  const body = { account_num, client_id, client_secret, accountquery: { mode, service_lines } };
+  const body = { account_num, client_id, client_secret, account_type, accountquery: { mode, service_lines } };
   const url    = editing ? `/api/accounts/${encodeURIComponent(editing)}` : '/api/accounts';
   const method = editing ? 'PUT' : 'POST';
   try {

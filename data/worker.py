@@ -15,13 +15,14 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 def get_auth_headers(account, client_secret, grant_type):
+    account_type = account.get('account_type', 'starlink')
     token_body = {
         'client_id':     account['client_id'],
         'client_secret': client_secret,
         'grant_type':    grant_type,
     }
     token_resp = requests.post(
-        'https://api.starlink.com/auth/connect/token',
+        f'https://api.{account_type}.com/auth/connect/token',
         data=token_body,
         verify=False,
     )

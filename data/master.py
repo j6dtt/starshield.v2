@@ -22,7 +22,8 @@ def load_config():
 
 
 def run_worker(docker_client, account, grant_type, request_timeout, client_secret, host_data_path):
-    account_num = account['account_num']
+    account_num  = account['account_num']
+    account_type = account.get('account_type', 'starlink').upper()
     container = None
     try:
         container = docker_client.containers.run(
@@ -56,21 +57,21 @@ def run_worker(docker_client, account, grant_type, request_timeout, client_secre
                 logging.warning(f'[worker] {line}')
 
         if exit_code != 0:
-            logging.error(f'{account_num} - worker exited with code {exit_code}')
+            logging.error(f'{account_type} - {account_num} - worker exited with code {exit_code}')
             return (account_num, None)
         last_line = output.decode('utf-8', errors='replace').strip().splitlines()[-1]
         terms = json.loads(last_line)
         account_name = terms[0]['accountName'] if terms else ''
         sl_count = len(set(t['serviceLineNumber'] for t in terms))
         label = f"{account_num} ({account_name})" if account_name else account_num
-        logging.info(f"{label} - total terminals: {len(terms)}, total service lines: {sl_count}")
+        logging.info(f"{account_type} - {label} - total terminals: {len(terms)}, total service lines: {sl_count}")
         return (account_num, terms)
     except docker.errors.APIError as e:
-        logging.error(f'{account_num} - Docker API error: {e}')
+        logging.error(f'{account_type} - {account_num} - Docker API error: {e}')
     except json.JSONDecodeError as e:
-        logging.error(f'{account_num} - could not parse worker stdout: {e}')
+        logging.error(f'{account_type} - {account_num} - could not parse worker stdout: {e}')
     except Exception as e:
-        logging.error(f'{account_num} - worker error: {e}')
+        logging.error(f'{account_type} - {account_num} - worker error: {e}')
     finally:
         if container:
             try:
@@ -113,11 +114,12 @@ if __name__ == '__main__':
             seen, accounts = set(), []
             for acct in authentication['accounts']:
                 num = acct['account_num']
+                acct_type = acct.get('account_type', 'starlink').upper()
                 if num in seen:
-                    logging.warning(f'{num} - duplicate, skipping.')
+                    logging.warning(f'{acct_type} - {num} - duplicate, skipping.')
                     continue
                 if acct.get('accountquery', {}).get('mode') == 'skip':
-                    logging.info(f'{num} - mode=skip, skipping.')
+                    logging.warning(f'{acct_type} - {num} - mode=skip, skipping.')
                     continue
                 seen.add(num)
                 accounts.append(acct)
@@ -141,7 +143,16 @@ if __name__ == '__main__':
                     else:
                         failed.append(account_num)
 
-            logging.info(f'TOTAL ACCOUNTS: {len(accounts)}  FAILED: {len(failed)}  TERMINALS: {len(all_terms)}')
+            logging.info('=' * 40)
+            acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
+            sl_accts  = sum(1 for a in accounts if a.get('account_type', 'starlink') == 'starlink')
+            ss_accts  = len(accounts) - sl_accts
+            sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('account_num')) == 'starlink')
+            ss_terms  = len(all_terms) - sl_terms
+            failed_sl = sum(1 for f in failed if acct_type_map.get(f) == 'starlink')
+            failed_ss = len(failed) - failed_sl
+            logging.info(f'ACCOUNTS   total: {len(accounts)}  starlink: {sl_accts}  starshield: {ss_accts}  failed: {len(failed)} (starlink: {failed_sl}  starshield: {failed_ss})')
+            logging.info(f'TERMINALS  total: {len(all_terms)}  starlink: {sl_terms}  starshield: {ss_terms}')
             if failed:
                 logging.warning(f'Failed accounts: {failed}')
 

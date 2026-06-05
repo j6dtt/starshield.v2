@@ -19,10 +19,13 @@ def convert_seconds_to_dhms(seconds):
 # ------------------------------------------------
 
 def get_starshield_data(headers, account, timeout):
+    account_type = account.get('account_type', 'starlink')
+    base_url = f"https://{account_type}.com/api/public/v2"
+
     try:
         # --------------- Get account info ----------------
         getAccount = requests.get(
-            "https://starlink.com/api/public/v2/account",
+            f"{base_url}/account",
             headers=headers,
             verify=False,
             timeout=timeout
@@ -30,13 +33,13 @@ def get_starshield_data(headers, account, timeout):
         accountNumber = getAccount["content"]["accountNumber"]
         accountName = getAccount["content"]["accountName"]
     except Exception as e:
-        logging.error(f"{account['account_num']} - /account failed: {e}")
+        logging.error(f"{account_type.upper()} - {account['account_num']} - /account failed: {e}")
         raise
 
     try:
         # ------- Get contact for Component info ----------
         getContacts = requests.get(
-            "https://starlink.com/api/public/v2/contacts",
+            f"{base_url}/contacts",
             headers=headers,
             verify=False,
             timeout=timeout
@@ -51,7 +54,7 @@ def get_starshield_data(headers, account, timeout):
             ""
         )
     except Exception as e:
-        logging.error(f"{account['account_num']} - /contacts failed: {e}")
+        logging.error(f"{account_type.upper()} - {account['account_num']} - /contacts failed: {e}")
         raise
 
     try:
@@ -61,13 +64,13 @@ def get_starshield_data(headers, account, timeout):
         i = 0
         mode = account['accountquery']['mode']
         if mode == 'skip':
-            logging.warning(f"{account['account_num']} - mode is 'skip', skipping account.")
+            logging.warning(f"{account_type.upper()} - {account['account_num']} - mode is 'skip', skipping account.")
             return []
         elif mode == 'include' and not account['accountquery']['service_lines']:
-            logging.warning(f"{account['account_num']} - mode is 'include' but service_lines is empty, skipping account.")
+            logging.warning(f"{account_type.upper()} - {account['account_num']} - mode is 'include' but service_lines is empty, skipping account.")
             return []
         elif mode not in ('full', 'include'):
-            logging.error(f"{account['account_num']} - invalid accountquery mode '{mode}', skipping.")
+            logging.error(f"{account_type.upper()} - {account['account_num']} - invalid accountquery mode '{mode}', skipping.")
             return []
 
         sl_query = ""
@@ -77,9 +80,9 @@ def get_starshield_data(headers, account, timeout):
 
         while True:
             if mode == 'full':
-                termurl = f"https://starlink.com/api/public/v2/user-terminals?page={i}"
+                termurl = f"{base_url}/user-terminals?page={i}"
             else:
-                termurl = f"https://starlink.com/api/public/v2/user-terminals?{sl_query}page={i}"
+                termurl = f"{base_url}/user-terminals?{sl_query}page={i}"
             getAllTerms = requests.get(
                 termurl,
                 headers=headers,
@@ -100,7 +103,7 @@ def get_starshield_data(headers, account, timeout):
             if metadata['isLastPage']:
                 break
     except Exception as e:
-        logging.error(f"{account['account_num']} - /user-terminals failed: {e}")
+        logging.error(f"{account_type.upper()} - {account['account_num']} - /user-terminals failed: {e}")
         raise
 
     # -------------- Create dataset --------------
@@ -146,7 +149,7 @@ def get_starshield_data(headers, account, timeout):
     """
     while True:
         getAllServiceLines = requests.get(
-            f"https://starlink.com/api/public/v2/service-lines?page={i}&orderByCreatedDateDescending=true",
+            f"{base_url}/service-lines?page={i}&orderByCreatedDateDescending=true",
             headers=headers
         ).json()
         metadata = getAllServiceLines["content"]
@@ -177,7 +180,7 @@ def get_starshield_data(headers, account, timeout):
         i = 0
         while True:
             getAllUsages = requests.post(
-                f"https://starlink.com/api/public/v2/data-usage/query?page={i}&limit=250",
+                f"{base_url}/data-usage/query?page={i}&limit=250",
                 json=payload,
                 headers=headers,
                 verify=False,
@@ -203,7 +206,7 @@ def get_starshield_data(headers, account, timeout):
             if metadata['isLastPage']:
                 break
     except Exception as e:
-        logging.error(f"{accountNumber} - /data-usage failed: {e}")
+        logging.error(f"{account_type.upper()} - {accountNumber} - /data-usage failed: {e}")
         raise
 
     try:
@@ -225,7 +228,7 @@ def get_starshield_data(headers, account, timeout):
 
         # Get last telemetry
         telemetry = requests.post(
-            "https://starlink.com/api/public/v2/telemetry/query",
+            f"{base_url}/telemetry/query",
             headers=headers,
             json=body,
             verify=False,
@@ -342,8 +345,8 @@ def get_starshield_data(headers, account, timeout):
                     term['Alert'] = (str((alertcodes)).strip("[']")).replace("', '","-")
                     term['AlertDescription'] = (str((alerts)).strip("[']")).replace("', '","-")
     except Exception as e:
-        logging.error(f"{accountNumber} - /telemetry failed: {e}")
+        logging.error(f"{account_type.upper()} - {accountNumber} - /telemetry failed: {e}")
         raise
 
-    logging.info(f"{accountNumber} ({accountName}) - total terminal: {len(active_terms)}, total service lines: {len(sl)}")
+    logging.info(f"{account_type.upper()} - {accountNumber} ({accountName}) - total terminal: {len(active_terms)}, total service lines: {len(sl)}")
     return active_terms

@@ -30,6 +30,7 @@ def load_config():
 
 # ---------------- Token request -----------------
 def get_auth_headers(account, grant_type):
+    account_type = account.get('account_type', 'starlink')
     try:
         token_body = {
             "client_id": account["client_id"],
@@ -37,7 +38,7 @@ def get_auth_headers(account, grant_type):
             "grant_type": grant_type
         }
         token_resp = requests.post(
-            "https://api.starlink.com/auth/connect/token",
+            f"https://api.{account_type}.com/auth/connect/token",
             data=token_body,
             verify=False
         )
@@ -48,7 +49,7 @@ def get_auth_headers(account, grant_type):
             "authorization": f"Bearer {token}"
         }
     except Exception as e:
-        logging.error(f"{account['account_num']} - get_auth_headers failed: {e}")
+        logging.error(f"{account_type.upper()} - {account['account_num']} - get_auth_headers failed: {e}")
         raise
 
 if __name__ == "__main__":
@@ -73,11 +74,12 @@ if __name__ == "__main__":
                 accounts = []
                 for account in authentication["accounts"]:
                     num = account["account_num"]
+                    acct_type = account.get('account_type', 'starlink').upper()
                     if num in seen:
-                        logging.warning(f"{num} - duplicate account number in account list, skipping.")
+                        logging.warning(f"{acct_type} - {num} - duplicate account number in account list, skipping.")
                         continue
                     if account.get("accountquery", {}).get("mode") == "skip":
-                        logging.warning(f"{num} - mode=skip, skipping.")
+                        logging.warning(f"{acct_type} - {num} - mode=skip, skipping.")
                         continue
                     seen.add(num)
                     accounts.append(account)
@@ -90,11 +92,20 @@ if __name__ == "__main__":
                             t['account_num'] = account['account_num']
                         all_terms.extend(terms)
                     except Exception as e:
-                        logging.error(f"{account['account_num']} - error: {e} — skipping account.")
+                        logging.error(f"{account.get('account_type','starlink').upper()} - {account['account_num']} - error: {e} — skipping account.")
                         failed.append(account["account_num"])
-                logging.info(f'TOTAL ACCOUNTS: {len(accounts)}  FAILED: {len(failed)}  TERMINALS: {len(all_terms)}')
+                logging.info('=' * 40)
+                acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
+                sl_accts  = sum(1 for a in accounts if a.get('account_type', 'starlink') == 'starlink')
+                ss_accts  = len(accounts) - sl_accts
+                sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('account_num')) == 'starlink')
+                ss_terms  = len(all_terms) - sl_terms
+                failed_sl = sum(1 for f in failed if acct_type_map.get(f) == 'starlink')
+                failed_ss = len(failed) - failed_sl
+                logging.info(f'ACCOUNTS   total: {len(accounts)}  starlink: {sl_accts}  starshield: {ss_accts}  failed: {len(failed)} (starlink: {failed_sl}  starshield: {failed_ss})')
+                logging.info(f'TERMINALS  total: {len(all_terms)}  starlink: {sl_terms}  starshield: {ss_terms}')
                 if failed:
-                    logging.warning(f"Failed accounts: {failed}")
+                    logging.warning(f'Failed accounts: {failed}')
 
                 # Load last known good dataset
                 try:
