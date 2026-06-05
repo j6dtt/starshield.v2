@@ -62,7 +62,7 @@ if __name__ == "__main__":
                         logging.warning(f"{num} - duplicate account number in account list, skipping.")
                         continue
                     if account.get("accountquery", {}).get("mode") == "skip":
-                        logging.info(f"{num} - mode=skip, skipping.")
+                        logging.warning(f"{num} - mode=skip, skipping.")
                         continue
                     seen.add(num)
                     accounts.append(account)
