@@ -12,6 +12,13 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
+# -- monitoring ----------------------------------------------------------------
+#import os
+_MONITOR = os.getenv("APP_MONITOR", "1") == "1"
+if _MONITOR:
+    from applog import emit, install_crash_handler, register_shutdown_hooks, Heartbeat
+# ------------------------------------------------------------------------------
+
 # ---------------- Load config --------------------
 def load_config():
     try:
@@ -45,6 +52,14 @@ def get_auth_headers(account, grant_type):
         raise
 
 if __name__ == "__main__":
+    # -- monitoring -------------------------------------------------------
+    if _MONITOR:
+        install_crash_handler()
+        register_shutdown_hooks()
+        emit("STARTUP")
+        emit("READY")
+        Heartbeat(interval_seconds=30).start()
+    # ---------------------------------------------------------------------
     try:
         while True:
             try:
