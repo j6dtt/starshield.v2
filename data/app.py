@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO,
 
 # -- monitoring ----------------------------------------------------------------
 #import os
-_MONITOR = os.getenv("APP_MONITOR", "1") == "1"
+_MONITOR = os.getenv("APP_MONITOR", "0") == "1"
 if _MONITOR:
     from applog import emit, install_crash_handler, register_shutdown_hooks, Heartbeat
 # ------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ def load_config():
         raise
 
 # ---------------- Token request -----------------
-def get_auth_headers(account, grant_type):
+def get_auth_headers(account, grant_type, timeout):
     account_type = account.get('account_type', 'starlink')
     try:
         token_body = {
@@ -40,7 +40,8 @@ def get_auth_headers(account, grant_type):
         token_resp = requests.post(
             f"https://api.{account_type}.com/auth/connect/token",
             data=token_body,
-            verify=False
+            verify=False,
+            timeout=timeout
         )
         token = token_resp.json()["access_token"]
         return {
@@ -64,6 +65,7 @@ if __name__ == "__main__":
     try:
         while True:
             try:
+                cycle_start = time.time()
                 config = load_config()
                 authentication = config["authentication"]
                 grant_type = authentication["grant_type"]
@@ -86,10 +88,8 @@ if __name__ == "__main__":
                 logging.info("Starting data retrieval...")
                 for account in accounts:
                     try:
-                        headers = get_auth_headers(account, grant_type)
+                        headers = get_auth_headers(account, grant_type, request_timeout)
                         terms = get_starshield_data(headers, account, request_timeout)
-                        for t in terms:
-                            t['account_num'] = account['account_num']
                         all_terms.extend(terms)
                     except Exception as e:
                         logging.error(f"{account.get('account_type','starlink').upper()} - {account['account_num']} - error: {e} — skipping account.")
@@ -98,7 +98,7 @@ if __name__ == "__main__":
                 acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
                 sl_accts  = sum(1 for a in accounts if a.get('account_type', 'starlink') == 'starlink')
                 ss_accts  = len(accounts) - sl_accts
-                sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('account_num')) == 'starlink')
+                sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('accountNumber')) == 'starlink')
                 ss_terms  = len(all_terms) - sl_terms
                 failed_sl = sum(1 for f in failed if acct_type_map.get(f) == 'starlink')
                 failed_ss = len(failed) - failed_sl
@@ -116,9 +116,10 @@ if __name__ == "__main__":
 
                 # Preserve terminals from failed accounts; replace all others with fresh data
                 failed_set = set(failed)
-                stale = [t for t in existing if t.get('account_num') in failed_set or t.get('accountNumber') in failed_set]
+                stale = [t for t in existing if t.get('accountNumber') in failed_set]
                 merged = all_terms + stale
                 logging.info(f'MERGED TERMINALS: {len(merged)} ({len(stale)} preserved from {len(failed)} failed accounts)')
+                logging.info(f'CYCLE TIME: {time.time() - cycle_start:.1f}s')
 
                 with open('./_1.allterms.json', 'w') as file:
                     json.dump(merged, file, indent=4, ensure_ascii=False)

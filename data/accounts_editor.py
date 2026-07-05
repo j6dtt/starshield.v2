@@ -218,7 +218,7 @@ HTML = r"""<!DOCTYPE html>
   /* Main layout */
   .main { display: flex; flex: 1; overflow: hidden; }
   /* Left panel — accounts */
-  .left-panel { display: flex; flex-direction: column; flex: 0 0 50%; min-width: 220px; border-right: none; overflow: hidden; }
+  .left-panel { display: flex; flex-direction: column; flex: 0 0 45%; min-width: 220px; border-right: none; overflow: hidden; }
   /* Resizer */
   .resizer { width: 5px; background: #21262d; cursor: col-resize; flex-shrink: 0; transition: background .15s; }
   .resizer:hover, .resizer.dragging { background: #388bfd; }

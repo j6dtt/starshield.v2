@@ -1,8 +1,8 @@
-name: starshield-editor
+name: starshield-service-accounts
 
 services:
-  config-editor:
-    container_name: starshield.config-editor
+  starshield-service-accounts:
+    container_name: starshield-service-accounts
     image: python:3.13-slim-u9
     volumes:
       - ./data:/app
@@ -10,7 +10,13 @@ services:
     working_dir: /app
     env_file:
       - ./data/.env
-    command: ["gunicorn", "config_editor:app", "--bind", "0.0.0.0:5001", "--certfile", "/app/tls/ssl.lab.int.crt", "--keyfile", "/app/tls/ssl.lab.int.key", "--worker-class", "gthread", "--threads", "4", "--workers", "1"]
+    command: ["gunicorn", "accounts_editor:app", "--bind", "0.0.0.0:5001", "--certfile", "/app/tls/ssl.lab.int.crt", "--keyfile", "/app/tls/ssl.lab.int.key", "--worker-class", "gthread", "--threads", "4", "--workers", "1"]
     ports:
       - "5001:5001"
     restart: unless-stopped
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 192.168.101.0/24

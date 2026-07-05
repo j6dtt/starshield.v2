@@ -4,7 +4,25 @@ services:
     image: python:3.13-slim-u7
     volumes:
       - ./data:/app
+      - /apps/app-monitor/data/applog/:/app/applog:ro
     env_file:
       - ./data/.env
     command: ["python3", "app.py"]
     restart: unless-stopped
+    #-----app-monitor-------------------------------    
+    environment:
+      APP_MONITOR: "1"          # set to "0" to disable monitoring
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://172.16.0.46:9000"
+        tag: "{{.Name}}"
+        cache-max-size: "10m"
+        cache-max-file: "3"
+    #-----------------------------------------------
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24

@@ -147,7 +147,7 @@ if __name__ == '__main__':
             acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
             sl_accts  = sum(1 for a in accounts if a.get('account_type', 'starlink') == 'starlink')
             ss_accts  = len(accounts) - sl_accts
-            sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('account_num')) == 'starlink')
+            sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('accountNumber')) == 'starlink')
             ss_terms  = len(all_terms) - sl_terms
             failed_sl = sum(1 for f in failed if acct_type_map.get(f) == 'starlink')
             failed_ss = len(failed) - failed_sl
@@ -165,7 +165,7 @@ if __name__ == '__main__':
 
             # Preserve terminals from failed accounts; replace all others with fresh data
             failed_set = set(failed)
-            stale = [t for t in existing if t.get('account_num') in failed_set or t.get('accountNumber') in failed_set]
+            stale = [t for t in existing if t.get('accountNumber') in failed_set]
             merged = all_terms + stale
             logging.info(f'MERGED TERMINALS: {len(merged)} ({len(stale)} preserved from {len(failed)} failed accounts)')
 

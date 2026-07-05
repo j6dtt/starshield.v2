@@ -14,3 +14,9 @@ services:
       - HOST_DATA_PATH=/apps/starshield.v2/data
     command: ["python3", "master.py"]
     restart: unless-stopped
+    
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
