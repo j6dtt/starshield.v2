@@ -36,6 +36,12 @@ def get_starshield_data(headers, account, timeout):
         logging.error(f"{account_type.upper()} - {account['account_num']} - /account failed: {e}")
         raise
 
+    if accountNumber != account.get('account_num'):
+        logging.warning(
+            f"{account_type.upper()} - config account_num '{account.get('account_num')}' "
+            f"does not match API accountNumber '{accountNumber}' — check config.json for a typo."
+        )
+
     try:
         # ------- Get contact for Component info ----------
         getContacts = requests.get(

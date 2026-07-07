@@ -86,11 +86,17 @@ if __name__ == "__main__":
                     seen.add(num)
                     accounts.append(account)
                 logging.info("Starting data retrieval...")
+                sl_terms = 0
+                ss_terms = 0
                 for account in accounts:
                     try:
                         headers = get_auth_headers(account, grant_type, request_timeout)
                         terms = get_starshield_data(headers, account, request_timeout)
                         all_terms.extend(terms)
+                        if account.get('account_type', 'starlink') == 'starlink':
+                            sl_terms += len(terms)
+                        else:
+                            ss_terms += len(terms)
                     except Exception as e:
                         logging.error(f"{account.get('account_type','starlink').upper()} - {account['account_num']} - error: {e} — skipping account.")
                         failed.append(account["account_num"])
@@ -98,8 +104,6 @@ if __name__ == "__main__":
                 acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
                 sl_accts  = sum(1 for a in accounts if a.get('account_type', 'starlink') == 'starlink')
                 ss_accts  = len(accounts) - sl_accts
-                sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('accountNumber')) == 'starlink')
-                ss_terms  = len(all_terms) - sl_terms
                 failed_sl = sum(1 for f in failed if acct_type_map.get(f) == 'starlink')
                 failed_ss = len(failed) - failed_sl
                 logging.info(f'ACCOUNTS   total: {len(accounts)}  starlink: {sl_accts}  starshield: {ss_accts}  failed: {len(failed)} (starlink: {failed_sl}  starshield: {failed_ss})')

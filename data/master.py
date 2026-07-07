@@ -126,7 +126,10 @@ if __name__ == '__main__':
 
             logging.info(f'Starting parallel cycle — {len(accounts)} accounts.')
 
+            acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
+
             all_terms, failed = [], []
+            sl_terms, ss_terms = 0, 0
             with ThreadPoolExecutor(max_workers=len(accounts)) as executor:
                 futures = {
                     executor.submit(
@@ -140,15 +143,16 @@ if __name__ == '__main__':
                     account_num, terms = future.result()
                     if terms is not None:
                         all_terms.extend(terms)
+                        if acct_type_map.get(account_num) == 'starlink':
+                            sl_terms += len(terms)
+                        else:
+                            ss_terms += len(terms)
                     else:
                         failed.append(account_num)
 
             logging.info('=' * 40)
-            acct_type_map = {a['account_num']: a.get('account_type', 'starlink') for a in accounts}
             sl_accts  = sum(1 for a in accounts if a.get('account_type', 'starlink') == 'starlink')
             ss_accts  = len(accounts) - sl_accts
-            sl_terms  = sum(1 for t in all_terms if acct_type_map.get(t.get('accountNumber')) == 'starlink')
-            ss_terms  = len(all_terms) - sl_terms
             failed_sl = sum(1 for f in failed if acct_type_map.get(f) == 'starlink')
             failed_ss = len(failed) - failed_sl
             logging.info(f'ACCOUNTS   total: {len(accounts)}  starlink: {sl_accts}  starshield: {ss_accts}  failed: {len(failed)} (starlink: {failed_sl}  starshield: {failed_ss})')
