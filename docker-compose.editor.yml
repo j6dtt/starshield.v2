@@ -12,7 +12,7 @@ services:
       - ./data/.env
     command: ["gunicorn", "accounts_editor:app", "--bind", "0.0.0.0:5001", "--certfile", "/app/tls/ssl.lab.int.crt", "--keyfile", "/app/tls/ssl.lab.int.key", "--worker-class", "gthread", "--threads", "4", "--workers", "1"]
     ports:
-      - "5001:5001"
+      - "0.0.0.0:5001:5001"
     restart: unless-stopped
 
 networks:

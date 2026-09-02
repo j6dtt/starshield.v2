@@ -29,12 +29,19 @@ def load_config():
         raise
 
 # ---------------- Token request -----------------
+def resolve_client_secret(account):
+    """Per-account client_secret from config.json; CLIENT_SECRET env is a fallback."""
+    secret = (account.get("client_secret") or "").strip()
+    if not secret or secret == "_secret_":
+        return os.getenv("CLIENT_SECRET")
+    return secret
+
 def get_auth_headers(account, grant_type, timeout):
     account_type = account.get('account_type', 'starlink')
     try:
         token_body = {
             "client_id": account["client_id"],
-            "client_secret": os.getenv("CLIENT_SECRET"),
+            "client_secret": resolve_client_secret(account),
             "grant_type": grant_type
         }
         token_resp = requests.post(

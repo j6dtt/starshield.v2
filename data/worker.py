@@ -14,6 +14,14 @@ logging.basicConfig(level=logging.INFO,
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
+def resolve_client_secret(account, env_secret):
+    """Per-account client_secret from config.json; CLIENT_SECRET env is a fallback."""
+    secret = (account.get('client_secret') or '').strip()
+    if not secret or secret == '_secret_':
+        return env_secret
+    return secret
+
+
 def get_auth_headers(account, client_secret, grant_type):
     account_type = account.get('account_type', 'starlink')
     token_body = {
@@ -38,7 +46,7 @@ def get_auth_headers(account, client_secret, grant_type):
 if __name__ == '__main__':
     try:
         account_json    = os.environ['ACCOUNT_JSON']
-        client_secret   = os.environ['CLIENT_SECRET']
+        env_secret      = os.environ.get('CLIENT_SECRET', '')
         grant_type      = os.environ['GRANT_TYPE']
         request_timeout = int(os.environ['REQUEST_TIMEOUT'])
     except KeyError as e:
@@ -52,6 +60,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     account_num = account.get('account_num', 'UNKNOWN')
+    client_secret = resolve_client_secret(account, env_secret)
 
     try:
         headers = get_auth_headers(account, client_secret, grant_type)

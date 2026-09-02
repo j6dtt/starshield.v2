@@ -1,3 +1,4 @@
 __pycache__/
-.env
 _*
+.env
+data/config.json

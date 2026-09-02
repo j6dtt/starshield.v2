@@ -398,7 +398,7 @@ HTML = r"""<!DOCTYPE html>
     </div>
     <div class="field">
       <label>Client Secret</label>
-      <input type="text" id="fClientSecret" placeholder="_secret_">
+      <input type="text" id="fClientSecret" placeholder="OAuth client secret">
     </div>
     <div class="field">
       <label>Account Type</label>

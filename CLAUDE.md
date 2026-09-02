@@ -51,7 +51,7 @@ Output is written to `./data/_1.allterms.json`.
 
 | Variable          | Source                      | Description                                      |
 |-------------------|-----------------------------|--------------------------------------------------|
-| `CLIENT_SECRET`   | `.env`                      | OAuth client secret for Starlink API             |
+| `CLIENT_SECRET`   | `.env`                      | Fallback OAuth client secret, used only when an account's `client_secret` in `config.json` is missing or still the `_secret_` placeholder |
 | `UI_USER`         | `.env`                      | Config editor login username                     |
 | `UI_PASS`         | `.env`                      | Config editor login password                     |
 | `HOST_DATA_PATH`  | `docker-compose.master.yml` | Host absolute path to `./data` for worker mounts |
@@ -79,7 +79,7 @@ Master container spawns one ephemeral worker container per account simultaneousl
 3. Typical cycle time: 7–10s for 37 accounts (vs sequential ~several minutes)
 
 **Worker (`worker.py`):**
-- Receives `ACCOUNT_JSON`, `CLIENT_SECRET`, `GRANT_TYPE`, `REQUEST_TIMEOUT` via env vars
+- Receives `ACCOUNT_JSON`, `GRANT_TYPE`, `REQUEST_TIMEOUT` via env vars (`CLIENT_SECRET` optional — fallback when `ACCOUNT_JSON.client_secret` is absent/`_secret_`)
 - Mounts `HOST_DATA_PATH:/app:ro` to access `starshield_data.py`
 - Logging → stderr (stdout reserved for JSON payload)
 - `print(json.dumps(terms))` → captured by master
@@ -117,7 +117,7 @@ Flask app served via gunicorn + TLS on port 5001. Manages `config.json` accounts
 config.authentication.accounts[]
   account_num       — used in log messages and worker container names
   client_id         — OAuth client ID
-  client_secret     — placeholder ("_secret_"), real secret via CLIENT_SECRET env var
+  client_secret     — per-account OAuth client secret (real value stored here). `_secret_` or empty falls back to the CLIENT_SECRET env var. Resolved by `resolve_client_secret()` in app.py / worker.py; captured via the config editor's Client Secret field
   accountquery
     mode            — "full" | "include" | "skip"
     service_lines[] — required (non-empty) when mode is "include"
@@ -132,4 +132,5 @@ config.remote_server              — remote syslog destination (enable flag)
 - Master cycle-level errors → logged, sleep, retry next cycle
 - Worker exit code != 0 → master treats as failed account, preserves stale terminals
 - `request_timeout` is required in `config.json` — missing key raises `KeyError`
-- Do NOT commit: `.env`, `data/tls/`, `data/config.json`
+- Do NOT commit: `.env`, `data/tls/`, `data/config.json` (all gitignored)
+- `data/config.json` holds live per-account `client_secret` values and is gitignored — it lives only on the deployment host. Provision/edit it there (directly or via the config editor UI).
